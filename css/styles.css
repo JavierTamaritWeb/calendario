@@ -34,6 +34,63 @@ header {
 }
 
 /***********************
+ * LEYENDA
+ ***********************/
+.legend {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 1rem;
+  padding: 0.5rem;
+  background-color: var(--blanco-hueso);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.legend h2 {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--gris-oscuro);
+}
+
+.legend ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--gris-oscuro);
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Colores de la leyenda */
+.legend-color.falla {
+  background-color: var(--turquesa);
+}
+
+.legend-color.evento {
+  background-color: var(--gris-oscuro);
+}
+
+.legend-color.festivo {
+  background-color: var(--rojo-coral);
+}
+
+/***********************
  * GRID DE MESES
  ***********************/
 .meses-grid {
@@ -45,21 +102,37 @@ header {
   gap: 1rem;
 }
 
-/* Responsive Grid */
-/* Móvil: hasta 600px => 2 columnas */
-@media (max-width: 600px) {
+/* Breakpoints personalizados */
+/* Hasta 480px: 1 columna */
+@media (max-width: 480px) {
+  .meses-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 481px - 768px: 2 columnas */
+@media (min-width: 481px) and (max-width: 768px) {
   .meses-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-/* Tablet: 601px a 1024px => 3 columnas */
-@media (min-width: 601px) and (max-width: 1024px) {
+
+/* 769px - 1024px: 3 columnas */
+@media (min-width: 769px) and (max-width: 1024px) {
   .meses-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-/* Desktop: 1025px en adelante => 4 columnas */
-@media (min-width: 1025px) {
+
+/* 1025px - 1200px: 4 columnas */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .meses-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Desde 1201px en adelante: 4 columnas (o ajusta a 5 si lo prefieres) */
+@media (min-width: 1201px) {
   .meses-grid {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -234,12 +307,11 @@ header {
   cursor: pointer;
 }
 
-/* Modal de día (tooltip modal) */
+/* Modal de día (tooltip modal) con tamaño fijo */
 .day-modal {
   position: fixed;
   top: 50%;
   left: 50%;
-  /* Tamaño fijo y sin posibilidad de redimensionar */
   width: 400px;
   height: 300px;
   resize: none;

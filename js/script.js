@@ -3,7 +3,7 @@
  * - Calendario basado en semanas (lunes como inicio).
  * - Prioridad de color: Falla > Evento > Festivo > Weekend.
  * - Muestra información y genera archivo .ics.
- * - Modal de día draggable (se mueve con clic y arrastre).
+ * - Modal de día draggable (movible con clic y arrastre).
  **************************************************************/
 
 /* ---------- Datos Base ---------- */
@@ -47,7 +47,6 @@ const specialEvents = {
  * Resultado: Lunes=0, …, Domingo=6.
  */
 const mondayBasedIndex = (jsDay) => (jsDay + 6) % 7;
-
 const isWeekendMondayBased = (dayIndex) => (dayIndex === 5 || dayIndex === 6);
 
 /* ---------- Inicialización ---------- */
@@ -340,7 +339,7 @@ function formatDateICS(date) {
 
 /* ---------- Draggable Modal ---------- */
 /**
- * Permite mover (draggable) el modal de día.
+ * Hace que el modal de día sea draggable (movible con clic y arrastre).
  */
 function makeDraggable(modalElement) {
   let isDragging = false;
@@ -348,7 +347,7 @@ function makeDraggable(modalElement) {
   
   modalElement.addEventListener('mousedown', function(e) {
     isDragging = true;
-    modalElement.style.transform = "none"; // Remover transform para usar coordenadas absolutas
+    modalElement.style.transform = "none"; // Elimina transform para posicionamiento absoluto
     const rect = modalElement.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
