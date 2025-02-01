@@ -1,5 +1,7 @@
-/* Variables de estilo */
-:root {
+/***********************
+ * VARIABLES & RESET
+ ***********************/
+ :root {
   /* Colores */
   --blanco-hueso: #F5F5F5;
   --rojo-coral: #FF6F61;
@@ -10,18 +12,19 @@
   --gris-oscuro: #4A4A4A;
 }
 
-/* Reset básico */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Fuente y colores */
+/***********************
+ * TIPOGRAFÍA & BASE
+ ***********************/
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #f4f4f4;
-  /* El color de texto por defecto es --rojo-coral, pero lo sobreescribiremos en los días normales */
+  /* Por defecto el texto es rojo coral; se sobrescribe en los días normales */
   color: var(--rojo-coral);
 }
 
@@ -30,18 +33,41 @@ header {
   margin: 1.5rem 0;
 }
 
-/* Cuadrícula 4x3 para 12 meses (mini) */
+/***********************
+ * GRID DE MESES
+ ***********************/
 .meses-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 1rem;
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 2rem;
+  display: grid;
+  gap: 1rem;
 }
 
+/* Responsive Grid */
+/* Móvil: hasta 600px => 2 columnas */
+@media (max-width: 600px) {
+  .meses-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* Tablet: 601px a 1024px => 3 columnas */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .meses-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+/* Desktop: 1025px en adelante => 4 columnas */
+@media (min-width: 1025px) {
+  .meses-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/***********************
+ * TARJETAS DE MES
+ ***********************/
 .mes-card {
   background-color: #fff;
   border-radius: 8px;
@@ -57,7 +83,9 @@ header {
   margin-bottom: 0.5rem;
 }
 
-/* Calendario mini */
+/***********************
+ * CALENDARIOS MINI
+ ***********************/
 .calendar-mini {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -74,45 +102,101 @@ header {
   position: relative;
 }
 
-/* Fines de semana (mini) */
-.weekend-mini {
-  background-color: #f4e0d8d0;
-}
-
-/* Falla => azul, texto blanco (mini) */
+/* Días especiales en mini */
 .mini-falla {
   background-color: var(--turquesa);
   color: var(--blanco-hueso);
 }
-
-/* Evento => púrpura, texto blanco (mini) */
 .mini-evento {
   background-color: var(--gris-oscuro);
   color: var(--blanco-hueso);
 }
-
-/* Festivo => dorado (mini) */
 .mini-festivo {
   background-color: var(--rojo-coral);
   color: var(--blanco-hueso);
 }
 
-/* Marcador (F, Fa, E) */
 .mini-marker {
   display: block;
   font-size: 0.6rem;
-  color: inherit; 
   margin-top: 2px;
+  color: inherit;
 }
 
-/* --- Modal (calendario grande) --- */
+.weekend-mini {
+  background-color: #f4e0d8d0;
+}
+
+/***********************
+ * CALENDARIOS COMPLETOS
+ ***********************/
+.calendar-container {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.day {
+  padding: 0.5rem;
+  text-align: center;
+  border-radius: 4px;
+  background-color: #fdfdfd;
+  box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
+  position: relative;
+  cursor: pointer;
+}
+
+.day-label {
+  display: block;
+  font-size: 0.7rem;
+  margin-top: 4px;
+  color: var(--blanco-hueso);
+}
+
+.weekend {
+  background-color: #faf4f4;
+}
+
+/* Días especiales en calendario completo */
+.falla-day {
+  background-color: var(--turquesa);
+  color: var(--blanco-hueso);
+}
+.day.event {
+  background-color: var(--gris-oscuro);
+  color: var(--blanco-hueso);
+}
+.festivo-valencia {
+  background-color: var(--rojo-coral);
+  color: var(--blanco-hueso);
+}
+
+/***********************
+ * INFO ADICIONAL
+ ***********************/
+.info-adicional {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.info-adicional ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+/***********************
+ * MODALES
+ ***********************/
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: none; 
+  display: none;
   align-items: center;
   justify-content: center;
   background-color: rgba(0,0,0,0.5);
@@ -138,14 +222,8 @@ header {
 }
 
 @keyframes scaleIn {
-  from {
-    transform: scale(0.7);
-    opacity: 0.7;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+  from { transform: scale(0.7); opacity: 0.7; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
 .close-modal {
@@ -156,76 +234,7 @@ header {
   cursor: pointer;
 }
 
-/* Calendario grande */
-.calendar-container {
-  margin: 1rem 0;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
-}
-
-.day {
-  padding: 0.5rem;
-  text-align: center;
-  border-radius: 4px;
-  background-color: #fdfdfd;
-  box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
-  position: relative;
-  cursor: pointer;
-}
-
-.day-label {
-  /* Leyenda del evento o festivo */
-  display: block;
-  font-size: 0.7rem;
-  margin-top: 4px;
-  color: var(--blanco-hueso);
-}
-
-/* Fin de semana (grande) */
-.weekend {
-  background-color: #faf4f4;
-}
-
-/* Falla => verde clarito (grande) */
-.falla-day {
-  background-color: var(--turquesa);
-  color: var(--blanco-hueso);
-}
-
-/* Evento => punto rojo (grande) */
-.day.event {
-  background-color: var(--gris-oscuro);
-  color: var(--blanco-hueso); 
-}
-
-/* Festivo => dorado claro (grande) */
-.festivo-valencia {
-  background-color: var(--rojo-coral);
-  color: var(--blanco-hueso);
-}
-
-.info-adicional {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.info-adicional ul {
-  margin-top: 0.5rem;
-  padding-left: 1.2rem;
-  list-style-type: disc;
-}
-
-/* Responsivo: a menos de 600px => 2 columnas x 6 filas */
-@media (max-width: 600px) {
-  .meses-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-  }
-}
-
-/* Estilos para el modal de día (tooltip modal) */
+/* Modal de día (tooltip modal) */
 .day-modal {
   position: fixed;
   top: 50%;
@@ -238,13 +247,16 @@ header {
   display: none;
   z-index: 1000;
 }
+
 .day-modal.active {
   display: block;
 }
+
 .day-modal-content {
   position: relative;
   padding-top: 2rem; /* Separa la X del contenido */
 }
+
 .close-day-modal {
   position: absolute;
   top: -10px;
@@ -252,11 +264,12 @@ header {
   font-size: 1.8rem;
   cursor: pointer;
   color: var(--rojo-coral);
-  background-color: white;
+  background-color: #fff;
   border-radius: 50%;
   padding: 0.2rem 0.5rem;
   z-index: 1010;
 }
+
 #day-modal-accept {
   display: block;
   margin: 1rem auto 0;
