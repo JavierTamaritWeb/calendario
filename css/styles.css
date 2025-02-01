@@ -21,7 +21,8 @@
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #f4f4f4;
-  color: #FF6F61;
+  /* El color de texto por defecto es --rojo-coral, pero lo sobreescribiremos en los días normales */
+  color: var(--rojo-coral);
 }
 
 header {
@@ -242,7 +243,7 @@ header {
 }
 .day-modal-content {
   position: relative;
-  padding-top: 2rem; /* Aumenta el padding superior para separar la X del contenido */
+  padding-top: 2rem; /* Separa la X del contenido */
 }
 .close-day-modal {
   position: absolute;

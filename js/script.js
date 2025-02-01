@@ -1,9 +1,9 @@
 /**************************************************************
  * script.js
  *  - Semanas en lunes
- *  - Prioridad color (Falla > Evento > Festivo > Weekend)
- *  - namedHolidays => especifica el nombre del festivo (en vez de "Festivo")
- *  - generateMonthInfo => muestra solo el número del día y el nombre
+ *  - Prioridad de color (Falla > Evento > Festivo > Weekend)
+ *  - namedHolidays => nombre exacto del festivo (en lugar de "Festivo")
+ *  - generateMonthInfo => muestra el número del día y el nombre
  **************************************************************/
 
 /* === 1. DATOS BASE === */
@@ -14,7 +14,7 @@ const monthNames = [
 ];
 
 /**
- * Diccionario que asocia la fecha (MM-DD) con el NOMBRE exacto del festivo.
+ * Diccionario que asocia la fecha (MM-DD) con el nombre exacto del festivo.
  */
 const namedHolidays = {
   "01-01": "Año Nuevo",
@@ -54,7 +54,8 @@ const specialEvents = {
 };
 
 /**
- * Convertir getDay() (domingo=0) a índice basado en lunes.
+ * Convierte getDay() (donde domingo=0) a índice basado en lunes.
+ * Resultados: Lunes=0, Martes=1, …, Sábado=5, Domingo=6.
  */
 function mondayBasedIndex(jsDay) {
   return (jsDay + 6) % 7;
@@ -64,11 +65,11 @@ function isWeekendMondayBased(dayIndex) {
   return (dayIndex === 5 || dayIndex === 6);
 }
 
-/* === 2. Iniciar calendarios al cargar === */
+/* === 2. Inicializar calendarios al cargar === */
 window.addEventListener('DOMContentLoaded', () => {
   const gridMeses = document.getElementById('grid-de-meses');
 
-  // Crear 12 tarjetas (mini)
+  // Crear 12 tarjetas (mini calendarios)
   for (let i = 0; i < 12; i++) {
     const mesCard = document.createElement('div');
     mesCard.classList.add('mes-card');
@@ -89,7 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
     generateMiniCalendar(2025, i, miniCalendar.id);
   }
 
-  // Clic en tarjeta => abrir modal correspondiente
+  // Al hacer clic en una tarjeta, se abre el modal correspondiente
   document.querySelectorAll('.mes-card').forEach(card => {
     card.addEventListener('click', () => {
       const monthIndex = card.getAttribute('data-month');
@@ -100,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Generar calendarios grandes y la info adicional de cada mes
+  // Generar calendarios grandes y la información adicional para cada mes
   for (let i = 0; i < 12; i++) {
     generateFullCalendar(2025, i, `calendar-full-${i}`);
     generateMonthInfo(2025, i, `info-${i}`);
@@ -130,14 +131,12 @@ window.addEventListener('DOMContentLoaded', () => {
 function generateMiniCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
-
   container.innerHTML = "";
-
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
 
-  // Celdas vacías
+  // Celdas vacías para alinear el primer día
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day-mini');
@@ -148,7 +147,6 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     const mmdd = String(monthIndex + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     const date = new Date(year, monthIndex, day);
     const weekdayMon = mondayBasedIndex(date.getDay());
-
     const dayDiv = document.createElement('div');
     dayDiv.classList.add('day-mini');
     dayDiv.textContent = day;
@@ -178,8 +176,18 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     else if (isWeekendMondayBased(weekdayMon)) {
       dayDiv.classList.add('weekend-mini');
     }
-    // 5) Normal
 
+    // Si es un día "normal" (sin clases especiales) y es de lunes a sábado (weekdayMon < 6),
+    // se cambia el color de texto a gris oscuro.
+    if (
+      !dayDiv.classList.contains('mini-falla') &&
+      !dayDiv.classList.contains('mini-evento') &&
+      !dayDiv.classList.contains('mini-festivo')
+    ) {
+      if (weekdayMon < 6) {
+        dayDiv.style.color = "var(--gris-oscuro)";
+      }
+    }
     container.appendChild(dayDiv);
   }
 }
@@ -192,14 +200,12 @@ function generateMiniCalendar(year, monthIndex, containerId) {
 function generateFullCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
-
   container.innerHTML = "";
-
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
 
-  // Celdas vacías
+  // Celdas vacías para alinear el primer día
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day');
@@ -210,7 +216,6 @@ function generateFullCalendar(year, monthIndex, containerId) {
     const mmdd = String(monthIndex + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     const date = new Date(year, monthIndex, day);
     const weekdayMon = mondayBasedIndex(date.getDay());
-
     const dayDiv = document.createElement('div');
     dayDiv.classList.add('day');
     dayDiv.textContent = day;
@@ -254,9 +259,19 @@ function generateFullCalendar(year, monthIndex, containerId) {
     else if (isWeekendMondayBased(weekdayMon)) {
       dayDiv.classList.add('weekend');
     }
-    // 5) Normal
 
-    // Mostrar modal de día al hacer clic sobre la fecha
+    // Para los días "normales" (sin clases especiales) de lunes a sábado, se cambia el color de texto.
+    if (
+      !dayDiv.classList.contains('falla-day') &&
+      !dayDiv.classList.contains('event') &&
+      !dayDiv.classList.contains('festivo-valencia')
+    ) {
+      if (weekdayMon < 6) {
+        dayDiv.style.color = "var(--gris-oscuro)";
+      }
+    }
+
+    // Al hacer clic sobre el día se muestra el modal de día
     dayDiv.addEventListener('click', () => {
       showDayModal(year, monthIndex, day, mmdd);
     });
@@ -268,21 +283,17 @@ function generateFullCalendar(year, monthIndex, containerId) {
 /**
  * generateMonthInfo: Recorre los días del mes y muestra:
  * - Si es Falla, Evento o Festivo (con nombre)
- * - El número del día y la descripción, ordenado por día.
+ * - El número del día y la descripción, ordenados por día.
  */
 function generateMonthInfo(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
-
   container.innerHTML = "";
-
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
   const relevantDays = [];
-
   for (let day = 1; day <= totalDays; day++) {
     const mmdd = String(monthIndex + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     let desc = "";
-
     if (fallaDays.includes(mmdd)) {
       desc = "Falla";
       if (specialEvents[mmdd]) {
@@ -303,10 +314,8 @@ function generateMonthInfo(year, monthIndex, containerId) {
       relevantDays.push({ day, text: `${day}: ${desc}` });
     }
   }
-
   // Ordenar ascendente por día
   relevantDays.sort((a, b) => a.day - b.day);
-
   relevantDays.forEach(item => {
     const li = document.createElement('li');
     li.textContent = item.text;
@@ -315,7 +324,7 @@ function generateMonthInfo(year, monthIndex, containerId) {
 }
 
 /**
- * initModalEvents: Inicializa eventos para cerrar los modales (calendario grande).
+ * initModalEvents: Inicializa los eventos para cerrar los modales (calendario grande).
  */
 function initModalEvents() {
   const closeButtons = document.querySelectorAll('.close-modal');
@@ -327,7 +336,6 @@ function initModalEvents() {
       }
     });
   });
-
   const allModals = document.querySelectorAll('.modal');
   allModals.forEach(modal => {
     modal.addEventListener('click', (e) => {
@@ -344,10 +352,8 @@ function initModalEvents() {
 function generateICSFile(eventTitle, year, monthIndex, day) {
   const startDate = new Date(year, monthIndex, day, 0, 0);
   const endDate = new Date(year, monthIndex, day, 23, 59);
-
   const dtStart = formatDateICS(startDate);
   const dtEnd   = formatDateICS(endDate);
-
   const icsContent = `
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -362,10 +368,8 @@ DESCRIPTION:Generado desde el Calendario 2025
 END:VEVENT
 END:VCALENDAR
 `.trim();
-
   const blob = new Blob([icsContent], { type: 'text/calendar' });
   const url = URL.createObjectURL(blob);
-
   const link = document.createElement('a');
   link.href = url;
   link.download = eventTitle.replace(/\s+/g, '_') + '.ics';
@@ -384,7 +388,6 @@ function formatDateICS(date) {
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-
   return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
 }
 
@@ -396,13 +399,12 @@ let currentDayEvent = null;
  * @param {number} year 
  * @param {number} monthIndex 
  * @param {number} day 
- * @param {string} mmdd  -> Formato "MM-DD"
+ * @param {string} mmdd -> Formato "MM-DD"
  */
 function showDayModal(year, monthIndex, day, mmdd) {
   currentDayEvent = { year, monthIndex, day };
   const modalMessage = document.getElementById('day-modal-message');
   let message = `Fecha: ${day} de ${monthNames[monthIndex]}.`;
-  
   // Agregar detalles si la fecha es especial
   if (fallaDays.includes(mmdd)) {
     message += " Evento: Falla";
@@ -420,10 +422,8 @@ function showDayModal(year, monthIndex, day, mmdd) {
   } else if (namedHolidays[mmdd]) {
     message += ` Festivo: ${namedHolidays[mmdd]}`;
   }
-  
   message += " Al hacer clic en Aceptar, se descargará un archivo .ics para agregar el evento a tu calendario.";
   modalMessage.textContent = message;
-  
   // Mostrar el modal de día
   document.getElementById('day-modal').classList.add('active');
 }
