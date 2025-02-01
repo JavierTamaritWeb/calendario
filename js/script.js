@@ -1,8 +1,9 @@
 /**************************************************************
  * SCRIPT.JS
- * - Calendario basado en semanas con lunes como inicio.
+ * - Calendario basado en semanas (lunes como inicio).
  * - Prioridad de color: Falla > Evento > Festivo > Weekend.
- * - Se muestra información y se genera un archivo .ics.
+ * - Muestra información y genera archivo .ics.
+ * - Modal de día draggable (se mueve con clic y arrastre).
  **************************************************************/
 
 /* ---------- Datos Base ---------- */
@@ -42,14 +43,14 @@ const specialEvents = {
 
 /* ---------- Funciones Utilitarias ---------- */
 /**
- * Convierte el valor obtenido con getDay() (donde domingo=0)
- * a un índice basado en lunes (Lunes=0, …, Domingo=6).
+ * Convierte getDay() (donde domingo=0) a índice basado en lunes.
+ * Resultado: Lunes=0, …, Domingo=6.
  */
 const mondayBasedIndex = (jsDay) => (jsDay + 6) % 7;
 
 const isWeekendMondayBased = (dayIndex) => (dayIndex === 5 || dayIndex === 6);
 
-/* ---------- Inicialización al Cargar ---------- */
+/* ---------- Inicialización ---------- */
 window.addEventListener('DOMContentLoaded', () => {
   const gridMeses = document.getElementById('grid-de-meses');
 
@@ -100,13 +101,13 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelector('.close-day-modal').addEventListener('click', hideDayModal);
+
+  // Hacer draggable el modal de día
+  const dayModalElement = document.getElementById('day-modal');
+  makeDraggable(dayModalElement);
 });
 
 /* ---------- Funciones para Generar Calendarios ---------- */
-
-/**
- * Genera el mini-calendario para el mes indicado.
- */
 function generateMiniCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -115,14 +116,14 @@ function generateMiniCalendar(year, monthIndex, containerId) {
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
-
+  
   // Celdas vacías para alinear el primer día
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day-mini');
     container.appendChild(emptyDiv);
   }
-
+  
   for (let day = 1; day <= totalDays; day++) {
     const mmdd = `${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const date = new Date(year, monthIndex, day);
@@ -130,8 +131,7 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     const dayDiv = document.createElement('div');
     dayDiv.classList.add('day-mini');
     dayDiv.textContent = day;
-
-    // Aplicar clases según la prioridad
+  
     if (fallaDays.includes(mmdd)) {
       dayDiv.classList.add('mini-falla');
       const markerFa = document.createElement('span');
@@ -150,8 +150,7 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     } else if (isWeekendMondayBased(weekdayMon)) {
       dayDiv.classList.add('weekend-mini');
     }
-
-    // Días "normales" (sin clases especiales) de lunes a sábado: color gris oscuro
+  
     if (
       !dayDiv.classList.contains('mini-falla') &&
       !dayDiv.classList.contains('mini-evento') &&
@@ -163,10 +162,7 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     container.appendChild(dayDiv);
   }
 }
-
-/**
- * Genera el calendario completo para el mes indicado.
- */
+  
 function generateFullCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -175,14 +171,13 @@ function generateFullCalendar(year, monthIndex, containerId) {
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
-
-  // Celdas vacías para alinear el primer día
+  
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day');
     container.appendChild(emptyDiv);
   }
-
+  
   for (let day = 1; day <= totalDays; day++) {
     const mmdd = `${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const date = new Date(year, monthIndex, day);
@@ -190,8 +185,7 @@ function generateFullCalendar(year, monthIndex, containerId) {
     const dayDiv = document.createElement('div');
     dayDiv.classList.add('day');
     dayDiv.textContent = day;
-
-    // Días especiales
+  
     if (fallaDays.includes(mmdd)) {
       dayDiv.classList.add('falla-day');
       let labelText = "Falla";
@@ -218,8 +212,7 @@ function generateFullCalendar(year, monthIndex, containerId) {
     } else if (isWeekendMondayBased(weekdayMon)) {
       dayDiv.classList.add('weekend');
     }
-
-    // Días "normales" (sin clases especiales) de lunes a sábado: color gris oscuro
+  
     if (
       !dayDiv.classList.contains('falla-day') &&
       !dayDiv.classList.contains('event') &&
@@ -228,18 +221,14 @@ function generateFullCalendar(year, monthIndex, containerId) {
     ) {
       dayDiv.style.color = "var(--gris-oscuro)";
     }
-
-    // Mostrar el modal de día al hacer clic
+  
     dayDiv.addEventListener('click', () => {
       showDayModal(year, monthIndex, day, mmdd);
     });
     container.appendChild(dayDiv);
   }
 }
-
-/**
- * Genera la información adicional del mes (días especiales).
- */
+  
 function generateMonthInfo(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -263,7 +252,6 @@ function generateMonthInfo(year, monthIndex, containerId) {
       relevantDays.push({ day, text: `${day}: ${desc}` });
     }
   }
-  // Ordenar ascendente por día
   relevantDays.sort((a, b) => a.day - b.day);
   relevantDays.forEach(item => {
     const li = document.createElement('li');
@@ -273,9 +261,6 @@ function generateMonthInfo(year, monthIndex, containerId) {
 }
 
 /* ---------- Funciones para Modales ---------- */
-/**
- * Inicializa los eventos para cerrar los modales (calendario completo).
- */
 function initModalEvents() {
   document.querySelectorAll('.close-modal').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -289,10 +274,7 @@ function initModalEvents() {
     });
   });
 }
-
-/**
- * Muestra el modal de día con la información correspondiente.
- */
+  
 function showDayModal(year, monthIndex, day, mmdd) {
   currentDayEvent = { year, monthIndex, day };
   const modalMessage = document.getElementById('day-modal-message');
@@ -311,18 +293,12 @@ function showDayModal(year, monthIndex, day, mmdd) {
   modalMessage.textContent = message;
   document.getElementById('day-modal').classList.add('active');
 }
-
-/**
- * Oculta el modal de día.
- */
+  
 function hideDayModal() {
   document.getElementById('day-modal').classList.remove('active');
 }
 
 /* ---------- Funciones para .ics ---------- */
-/**
- * Genera y descarga el archivo .ics para el evento.
- */
 function generateICSFile(eventTitle, year, monthIndex, day) {
   const startDate = new Date(year, monthIndex, day, 0, 0);
   const endDate = new Date(year, monthIndex, day, 23, 59);
@@ -351,10 +327,7 @@ END:VCALENDAR
   link.click();
   document.body.removeChild(link);
 }
-
-/**
- * Formatea la fecha en el formato "YYYYMMDDTHHMMSSZ" (UTC).
- */
+  
 function formatDateICS(date) {
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -363,6 +336,34 @@ function formatDateICS(date) {
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   const seconds = String(date.getUTCSeconds()).padStart(2, '0');
   return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+}
+
+/* ---------- Draggable Modal ---------- */
+/**
+ * Permite mover (draggable) el modal de día.
+ */
+function makeDraggable(modalElement) {
+  let isDragging = false;
+  let offsetX = 0, offsetY = 0;
+  
+  modalElement.addEventListener('mousedown', function(e) {
+    isDragging = true;
+    modalElement.style.transform = "none"; // Remover transform para usar coordenadas absolutas
+    const rect = modalElement.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+  });
+  
+  document.addEventListener('mousemove', function(e) {
+    if (isDragging) {
+      modalElement.style.left = (e.clientX - offsetX) + "px";
+      modalElement.style.top = (e.clientY - offsetY) + "px";
+    }
+  });
+  
+  document.addEventListener('mouseup', function() {
+    isDragging = false;
+  });
 }
 
 /* ---------- Variable Global ---------- */
