@@ -1,0 +1,229 @@
+/* styles.css */
+/* Variables de estilo */
+
+:root {
+  /* Colores */
+  --blanco-hueso: #F5F5F5;
+  --rojo-coral: #FF6F61;
+  --rojo-coral-suave: #f4e0d8d0;
+  --turquesa: #00909E;
+  --rojo-salmon: #FF8C7A;
+  --naranja-coral: #FF944F;
+  --gris-oscuro: #4A4A4A;
+
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fuente y colores */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f4f4;
+  color: #FF6F61;
+}
+
+header {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+/* Cuadrícula 4x3 para 12 meses (mini) */
+.meses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1rem;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.mes-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.mes-card h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Calendario mini */
+.calendar-mini {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+}
+
+.day-mini {
+  text-align: center;
+  padding: 0.4rem;
+  border-radius: 4px;
+  background-color: #fdfdfd;
+  box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
+  font-size: 0.8rem;
+  position: relative;
+}
+
+/* Fines de semana (mini) */
+.weekend-mini {
+  background-color: #f4e0d8d0;
+}
+
+/* Falla => azul, texto blanco (mini) */
+.mini-falla {
+  background-color: var(--turquesa);
+  color: var(--blanco-hueso);
+}
+
+/* Evento => púrpura, texto blanco (mini) */
+.mini-evento {
+  background-color: var(--gris-oscuro);
+  color: var(--blanco-hueso);
+}
+
+/* Festivo => dorado (mini) */
+.mini-festivo {
+  background-color: var(--rojo-coral);
+  color: var(--blanco-hueso);
+}
+
+/* Marcador (F, Fa, E) */
+.mini-marker {
+  display: block;
+  font-size: 0.6rem;
+  color: inherit; 
+  margin-top: 2px;
+}
+
+/* --- Modal (calendario grande) --- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; 
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background-color: #fff;
+  position: relative;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  animation: scaleIn 0.25s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Calendario grande */
+.calendar-container {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.day {
+  padding: 0.5rem;
+  text-align: center;
+  border-radius: 4px;
+  background-color: #fdfdfd;
+  box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
+  position: relative;
+  cursor: pointer;
+}
+
+.day-label {
+  /* Leyenda del evento o festivo*/
+  display: block;
+  font-size: 0.7rem;
+  margin-top: 4px;
+  color: var(--blanco-hueso);
+}
+
+/* Fin de semana (grande) */
+.weekend {
+  background-color: #faf4f4;
+}
+
+/* Falla => verde clarito (grande) */
+.falla-day {
+  background-color: var(--turquesa);
+  color: var(--blanco-hueso);
+}
+
+/* Evento => punto rojo (grande) */
+.day.event {
+
+  background-color: var(--gris-oscuro);
+  color: var(--blanco-hueso); 
+}
+
+/* Festivo => dorado claro (grande) */
+.festivo-valencia {
+  background-color: var(--rojo-coral);
+  color: var(--blanco-hueso);
+}
+
+.info-adicional {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.info-adicional ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+/* Responsivo: a menos de 600px => 2 columnas x 6 filas */
+@media (max-width: 600px) {
+  .meses-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+}

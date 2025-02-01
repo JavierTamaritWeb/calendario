@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendario 2025</title>
+  <!-- Fuente Poppins (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" 
+    rel="stylesheet"/>
+  <!-- Enlazar la hoja de estilos -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Calendario 2025</h1>
+  </header>
+
+  <!-- SECCIÓN PRINCIPAL (cuadrícula 4x3 con 12 mini-calendarios) -->
+  <section class="meses-grid" id="grid-de-meses">
+    <!-- Se rellena dinámicamente en script.js -->
+  </section>
+
+  <!-- 12 MODALES (uno por cada mes). 
+       Cada uno tiene su info-adicional con <ul id="info-X"> para la lista de fechas. -->
+
+  <!-- ENERO (0) -->
+  <div class="modal" id="modal-0">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Enero 2025</h2>
+      <div class="calendar-container" id="calendar-full-0"></div>
+      <div class="info-adicional">
+        <p>Información sobre Enero:</p>
+        <ul id="info-0"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEBRERO (1) -->
+  <div class="modal" id="modal-1">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Febrero 2025</h2>
+      <div class="calendar-container" id="calendar-full-1"></div>
+      <div class="info-adicional">
+        <p>Información sobre Febrero:</p>
+        <ul id="info-1"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARZO (2) -->
+  <div class="modal" id="modal-2">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Marzo 2025</h2>
+      <div class="calendar-container" id="calendar-full-2"></div>
+      <div class="info-adicional">
+        <p>Información sobre Marzo:</p>
+        <ul id="info-2"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABRIL (3) -->
+  <div class="modal" id="modal-3">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Abril 2025</h2>
+      <div class="calendar-container" id="calendar-full-3"></div>
+      <div class="info-adicional">
+        <p>Información sobre Abril:</p>
+        <ul id="info-3"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAYO (4) -->
+  <div class="modal" id="modal-4">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Mayo 2025</h2>
+      <div class="calendar-container" id="calendar-full-4"></div>
+      <div class="info-adicional">
+        <p>Información sobre Mayo:</p>
+        <ul id="info-4"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUNIO (5) -->
+  <div class="modal" id="modal-5">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Junio 2025</h2>
+      <div class="calendar-container" id="calendar-full-5"></div>
+      <div class="info-adicional">
+        <p>Información sobre Junio:</p>
+        <ul id="info-5"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- JULIO (6) -->
+  <div class="modal" id="modal-6">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Julio 2025</h2>
+      <div class="calendar-container" id="calendar-full-6"></div>
+      <div class="info-adicional">
+        <p>Información sobre Julio:</p>
+        <ul id="info-6"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGOSTO (7) -->
+  <div class="modal" id="modal-7">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Agosto 2025</h2>
+      <div class="calendar-container" id="calendar-full-7"></div>
+      <div class="info-adicional">
+        <p>Información sobre Agosto:</p>
+        <ul id="info-7"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEPTIEMBRE (8) -->
+  <div class="modal" id="modal-8">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Septiembre 2025</h2>
+      <div class="calendar-container" id="calendar-full-8"></div>
+      <div class="info-adicional">
+        <p>Información sobre Septiembre:</p>
+        <ul id="info-8"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OCTUBRE (9) -->
+  <div class="modal" id="modal-9">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Octubre 2025</h2>
+      <div class="calendar-container" id="calendar-full-9"></div>
+      <div class="info-adicional">
+        <p>Información sobre Octubre:</p>
+        <ul id="info-9"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOVIEMBRE (10) -->
+  <div class="modal" id="modal-10">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Noviembre 2025</h2>
+      <div class="calendar-container" id="calendar-full-10"></div>
+      <div class="info-adicional">
+        <p>Información sobre Noviembre:</p>
+        <ul id="info-10"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DICIEMBRE (11) -->
+  <div class="modal" id="modal-11">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Diciembre 2025</h2>
+      <div class="calendar-container" id="calendar-full-11"></div>
+      <div class="info-adicional">
+        <p>Información sobre Diciembre:</p>
+        <ul id="info-11"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enlazar script.js -->
+  <script src="js/script.js"></script>
+</body>
+</html>
