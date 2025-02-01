@@ -1,6 +1,4 @@
-/* styles.css */
 /* Variables de estilo */
-
 :root {
   /* Colores */
   --blanco-hueso: #F5F5F5;
@@ -10,7 +8,6 @@
   --rojo-salmon: #FF8C7A;
   --naranja-coral: #FF944F;
   --gris-oscuro: #4A4A4A;
-
 }
 
 /* Reset básico */
@@ -177,7 +174,7 @@ header {
 }
 
 .day-label {
-  /* Leyenda del evento o festivo*/
+  /* Leyenda del evento o festivo */
   display: block;
   font-size: 0.7rem;
   margin-top: 4px;
@@ -197,7 +194,6 @@ header {
 
 /* Evento => punto rojo (grande) */
 .day.event {
-
   background-color: var(--gris-oscuro);
   color: var(--blanco-hueso); 
 }
@@ -226,4 +222,47 @@ header {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(6, 1fr);
   }
+}
+
+/* Estilos para el modal de día (tooltip modal) */
+.day-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 1000;
+}
+.day-modal.active {
+  display: block;
+}
+.day-modal-content {
+  position: relative;
+  padding-top: 2rem; /* Aumenta el padding superior para separar la X del contenido */
+}
+.close-day-modal {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--rojo-coral);
+  background-color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.5rem;
+  z-index: 1010;
+}
+#day-modal-accept {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.5rem 1rem;
+  background-color: var(--rojo-coral);
+  color: var(--blanco-hueso);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }

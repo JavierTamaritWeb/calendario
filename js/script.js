@@ -14,8 +14,7 @@ const monthNames = [
 ];
 
 /**
- * Diccionario que asocia la fecha (MM-DD) con el NOMBRE exacto del festivo
- * (en lugar de decir "Festivo").
+ * Diccionario que asocia la fecha (MM-DD) con el NOMBRE exacto del festivo.
  */
 const namedHolidays = {
   "01-01": "Año Nuevo",
@@ -33,7 +32,7 @@ const namedHolidays = {
   "12-06": "Día de la Constitución",
   "12-08": "Inmaculada Concepción",
   "12-25": "Navidad"
-  // Si hay más, añádelos aquí.
+  // Agrega más si es necesario.
 };
 
 /**
@@ -55,7 +54,7 @@ const specialEvents = {
 };
 
 /**
- * Convert getDay() => lunes-based
+ * Convertir getDay() (domingo=0) a índice basado en lunes.
  */
 function mondayBasedIndex(jsDay) {
   return (jsDay + 6) % 7;
@@ -86,11 +85,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     gridMeses.appendChild(mesCard);
 
-    // Generar mini
+    // Generar mini calendario
     generateMiniCalendar(2025, i, miniCalendar.id);
   }
 
-  // Clic en tarjeta => abrir modal
+  // Clic en tarjeta => abrir modal correspondiente
   document.querySelectorAll('.mes-card').forEach(card => {
     card.addEventListener('click', () => {
       const monthIndex = card.getAttribute('data-month');
@@ -101,19 +100,32 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Generar calendarios grandes + info de cada mes
+  // Generar calendarios grandes y la info adicional de cada mes
   for (let i = 0; i < 12; i++) {
     generateFullCalendar(2025, i, `calendar-full-${i}`);
     generateMonthInfo(2025, i, `info-${i}`);
   }
 
   initModalEvents();
+
+  // Inicializar eventos para el modal de día
+  const acceptButton = document.getElementById('day-modal-accept');
+  acceptButton.addEventListener('click', () => {
+    if (currentDayEvent) {
+      const { year, monthIndex, day } = currentDayEvent;
+      const eventTitle = `Evento día ${day} de ${monthNames[monthIndex]}`;
+      generateICSFile(eventTitle, year, monthIndex, day);
+    }
+    hideDayModal();
+  });
+
+  const closeDayModalBtn = document.querySelector('.close-day-modal');
+  closeDayModalBtn.addEventListener('click', hideDayModal);
 });
 
 /**
- * generateMiniCalendar => prioridad:
- * 1) Falla, 2) Evento, 3) Festivo, 4) Weekend, 5) Normal
- * Usamos namedHolidays solo para la parte textual (en generateMonthInfo).
+ * generateMiniCalendar: Prioridad:
+ * 1) Falla, 2) Evento, 3) Festivo, 4) Weekend, 5) Normal.
  */
 function generateMiniCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
@@ -133,7 +145,7 @@ function generateMiniCalendar(year, monthIndex, containerId) {
   }
 
   for (let day = 1; day <= totalDays; day++) {
-    const mmdd = String(monthIndex+1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+    const mmdd = String(monthIndex + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     const date = new Date(year, monthIndex, day);
     const weekdayMon = mondayBasedIndex(date.getDay());
 
@@ -146,7 +158,6 @@ function generateMiniCalendar(year, monthIndex, containerId) {
       dayDiv.classList.add('mini-falla');
       const markerFa = document.createElement('span');
       markerFa.classList.add('mini-marker');
-      // markerFa.textContent = 'Falla';
       dayDiv.appendChild(markerFa);
     }
     // 2) Evento
@@ -154,15 +165,13 @@ function generateMiniCalendar(year, monthIndex, containerId) {
       dayDiv.classList.add('mini-evento');
       const markerE = document.createElement('span');
       markerE.classList.add('mini-marker');
-      // markerE.textContent = 'Evento';
       dayDiv.appendChild(markerE);
     }
-    // 3) Festivo => si existe en namedHolidays (p. ej. "01-01": "Año Nuevo")
+    // 3) Festivo
     else if (namedHolidays[mmdd]) {
       dayDiv.classList.add('mini-festivo');
       const markerF = document.createElement('span');
       markerF.classList.add('mini-marker');
-      // markerF.textContent = 'Festivo'; // O podrías poner la inicial del festivo
       dayDiv.appendChild(markerF);
     }
     // 4) Weekend
@@ -176,10 +185,9 @@ function generateMiniCalendar(year, monthIndex, containerId) {
 }
 
 /**
- * generateFullCalendar => prioridad:
- * 1) Falla, 2) Evento, 3) Festivo, 4) Weekend, 5) Normal
- * Si es Falla + Evento => "Falla – NombreEvento"
- * Si es Festivo => .festivo-valencia + namedHolidays[mmdd] en el texto
+ * generateFullCalendar: Prioridad:
+ * 1) Falla, 2) Evento, 3) Festivo, 4) Weekend, 5) Normal.
+ * Se muestran etiquetas según la prioridad.
  */
 function generateFullCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
@@ -199,7 +207,7 @@ function generateFullCalendar(year, monthIndex, containerId) {
   }
 
   for (let day = 1; day <= totalDays; day++) {
-    const mmdd = String(monthIndex+1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+    const mmdd = String(monthIndex + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     const date = new Date(year, monthIndex, day);
     const weekdayMon = mondayBasedIndex(date.getDay());
 
@@ -215,7 +223,6 @@ function generateFullCalendar(year, monthIndex, containerId) {
         labelText += ` – ${specialEvents[mmdd]}`;
       }
       if (namedHolidays[mmdd]) {
-        // si además es un festivo con nombre
         labelText += ` (Festivo: ${namedHolidays[mmdd]})`;
       }
       const labelSpan = document.createElement('span');
@@ -227,7 +234,6 @@ function generateFullCalendar(year, monthIndex, containerId) {
     else if (specialEvents[mmdd]) {
       dayDiv.classList.add('event');
       let labelText = specialEvents[mmdd];
-      // ¿También es festivo con nombre?
       if (namedHolidays[mmdd]) {
         labelText += ` (Festivo: ${namedHolidays[mmdd]})`;
       }
@@ -236,12 +242,12 @@ function generateFullCalendar(year, monthIndex, containerId) {
       labelSpan.textContent = labelText;
       dayDiv.appendChild(labelSpan);
     }
-    // 3) Festivo con nombre
+    // 3) Festivo
     else if (namedHolidays[mmdd]) {
       dayDiv.classList.add('festivo-valencia');
       const labelSpan = document.createElement('span');
       labelSpan.classList.add('day-label');
-      labelSpan.textContent = namedHolidays[mmdd]; 
+      labelSpan.textContent = namedHolidays[mmdd];
       dayDiv.appendChild(labelSpan);
     }
     // 4) Weekend
@@ -250,10 +256,9 @@ function generateFullCalendar(year, monthIndex, containerId) {
     }
     // 5) Normal
 
-    // Clic => .ics
+    // Mostrar modal de día al hacer clic sobre la fecha
     dayDiv.addEventListener('click', () => {
-      const eventTitle = `Evento día ${day} de ${monthNames[monthIndex]}`;
-      generateICSFile(eventTitle, year, monthIndex, day);
+      showDayModal(year, monthIndex, day, mmdd);
     });
 
     container.appendChild(dayDiv);
@@ -261,10 +266,9 @@ function generateFullCalendar(year, monthIndex, containerId) {
 }
 
 /**
- * generateMonthInfo => recorre todos los días del mes y muestra:
- *  - Si es falla, evento y/o festivo con su nombre exacto
- *  - Solo el "día" (sin el mes)
- *  - Ordenado por día
+ * generateMonthInfo: Recorre los días del mes y muestra:
+ * - Si es Falla, Evento o Festivo (con nombre)
+ * - El número del día y la descripción, ordenado por día.
  */
 function generateMonthInfo(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
@@ -279,50 +283,39 @@ function generateMonthInfo(year, monthIndex, containerId) {
     const mmdd = String(monthIndex + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     let desc = "";
 
-    // ¿Falla?
     if (fallaDays.includes(mmdd)) {
       desc = "Falla";
-      // Además, si hay un evento
       if (specialEvents[mmdd]) {
         desc += ` – ${specialEvents[mmdd]}`;
       }
-      // Además, si es festivo con nombre
       if (namedHolidays[mmdd]) {
         desc += ` (Festivo: ${namedHolidays[mmdd]})`;
       }
       relevantDays.push({ day, text: `${day}: ${desc}` });
-    }
-    // ¿Evento "solo"?
-    else if (specialEvents[mmdd]) {
+    } else if (specialEvents[mmdd]) {
       desc = specialEvents[mmdd];
-      // ¿Además es festivo con nombre?
       if (namedHolidays[mmdd]) {
         desc += ` (Festivo: ${namedHolidays[mmdd]})`;
       }
       relevantDays.push({ day, text: `${day}: ${desc}` });
-    }
-    // ¿Festivo con nombre?
-    else if (namedHolidays[mmdd]) {
+    } else if (namedHolidays[mmdd]) {
       desc = namedHolidays[mmdd];
-      // ej. "15: Asunción de la Virgen"
       relevantDays.push({ day, text: `${day}: ${desc}` });
     }
-    // sino => no lo listamos
   }
 
-  // Ordenar asc por day
-  relevantDays.sort((a,b) => a.day - b.day);
+  // Ordenar ascendente por día
+  relevantDays.sort((a, b) => a.day - b.day);
 
-  // Crear <li> por cada uno
   relevantDays.forEach(item => {
     const li = document.createElement('li');
-    li.textContent = item.text; // ej. "19: Falla – Presentación Falleras Mayores (Festivo: San José)"
+    li.textContent = item.text;
     container.appendChild(li);
   });
 }
 
 /**
- * initModalEvents => cerrar modales
+ * initModalEvents: Inicializa eventos para cerrar los modales (calendario grande).
  */
 function initModalEvents() {
   const closeButtons = document.querySelectorAll('.close-modal');
@@ -346,7 +339,7 @@ function initModalEvents() {
 }
 
 /**
- * Generar .ics
+ * generateICSFile: Genera y descarga el archivo .ics para el evento.
  */
 function generateICSFile(eventTitle, year, monthIndex, day) {
   const startDate = new Date(year, monthIndex, day, 0, 0);
@@ -382,7 +375,7 @@ END:VCALENDAR
 }
 
 /**
- * formatDateICS => "YYYYMMDDTHHMMSSZ"
+ * formatDateICS: Formatea la fecha en "YYYYMMDDTHHMMSSZ" (UTC).
  */
 function formatDateICS(date) {
   const year = date.getUTCFullYear();
@@ -393,4 +386,51 @@ function formatDateICS(date) {
   const seconds = String(date.getUTCSeconds()).padStart(2, '0');
 
   return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+}
+
+// Variable global para almacenar la fecha actualmente seleccionada
+let currentDayEvent = null;
+
+/**
+ * showDayModal: Muestra el modal con información del día.
+ * @param {number} year 
+ * @param {number} monthIndex 
+ * @param {number} day 
+ * @param {string} mmdd  -> Formato "MM-DD"
+ */
+function showDayModal(year, monthIndex, day, mmdd) {
+  currentDayEvent = { year, monthIndex, day };
+  const modalMessage = document.getElementById('day-modal-message');
+  let message = `Fecha: ${day} de ${monthNames[monthIndex]}.`;
+  
+  // Agregar detalles si la fecha es especial
+  if (fallaDays.includes(mmdd)) {
+    message += " Evento: Falla";
+    if (specialEvents[mmdd]) {
+      message += ` – ${specialEvents[mmdd]}`;
+    }
+    if (namedHolidays[mmdd]) {
+      message += ` (Festivo: ${namedHolidays[mmdd]})`;
+    }
+  } else if (specialEvents[mmdd]) {
+    message += ` Evento: ${specialEvents[mmdd]}`;
+    if (namedHolidays[mmdd]) {
+      message += ` (Festivo: ${namedHolidays[mmdd]})`;
+    }
+  } else if (namedHolidays[mmdd]) {
+    message += ` Festivo: ${namedHolidays[mmdd]}`;
+  }
+  
+  message += " Al hacer clic en Aceptar, se descargará un archivo .ics para agregar el evento a tu calendario.";
+  modalMessage.textContent = message;
+  
+  // Mostrar el modal de día
+  document.getElementById('day-modal').classList.add('active');
+}
+
+/**
+ * hideDayModal: Oculta el modal de día.
+ */
+function hideDayModal() {
+  document.getElementById('day-modal').classList.remove('active');
 }
