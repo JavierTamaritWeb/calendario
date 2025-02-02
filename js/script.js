@@ -167,10 +167,23 @@ function generateFullCalendar(year, monthIndex, containerId) {
   if (!container) return;
   container.innerHTML = "";
   
+  // Crear cabecera de días de la semana
+  const headerRow = document.createElement('div');
+  headerRow.classList.add('weekdays-header');
+  const daysAbbrev = ['L','M','X','J','V','S','D'];
+  daysAbbrev.forEach(abbrev => {
+    const cell = document.createElement('div');
+    cell.textContent = abbrev;
+    cell.classList.add('weekday-cell');
+    headerRow.appendChild(cell);
+  });
+  container.appendChild(headerRow);
+  
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
   
+  // Celdas vacías para alinear el primer día (después de la cabecera)
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day');
@@ -273,7 +286,7 @@ function initModalEvents() {
     });
   });
 }
-  
+
 function showDayModal(year, monthIndex, day, mmdd) {
   currentDayEvent = { year, monthIndex, day };
   const modalMessage = document.getElementById('day-modal-message');
@@ -292,7 +305,7 @@ function showDayModal(year, monthIndex, day, mmdd) {
   modalMessage.textContent = message;
   document.getElementById('day-modal').classList.add('active');
 }
-  
+
 function hideDayModal() {
   document.getElementById('day-modal').classList.remove('active');
 }
@@ -326,7 +339,7 @@ END:VCALENDAR
   link.click();
   document.body.removeChild(link);
 }
-  
+
 function formatDateICS(date) {
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, '0');

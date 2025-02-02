@@ -34,7 +34,7 @@ header {
 }
 
 /***********************
- * LEYENDA
+ * LEYENDA DE COLORES
  ***********************/
 .legend {
   width: 90%;
@@ -77,7 +77,6 @@ header {
   border: 1px solid #ccc;
 }
 
-/* Colores de la leyenda */
 .legend-color.falla {
   background-color: var(--turquesa);
 }
@@ -88,6 +87,32 @@ header {
 
 .legend-color.festivo {
   background-color: var(--rojo-coral);
+}
+
+/***********************
+ * LEYENDA DE DÍAS DE LA SEMANA
+ ***********************/
+.weekdays-legend {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 1rem;
+  padding: 0 0.5rem;
+}
+
+.weekdays-legend ul {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--gris-oscuro);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.weekdays-legend li {
+  flex: 1;
+  text-align: center;
 }
 
 /***********************
@@ -102,36 +127,27 @@ header {
   gap: 1rem;
 }
 
-/* Breakpoints personalizados */
-/* Hasta 480px: 1 columna */
+/* Breakpoints para la cuadrícula */
 @media (max-width: 480px) {
   .meses-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* 481px - 768px: 2 columnas */
 @media (min-width: 481px) and (max-width: 768px) {
   .meses-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-/* 769px - 1024px: 3 columnas */
 @media (min-width: 769px) and (max-width: 1024px) {
   .meses-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
-/* 1025px - 1200px: 4 columnas */
 @media (min-width: 1025px) and (max-width: 1200px) {
   .meses-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
-
-/* Desde 1201px en adelante: 4 columnas (o ajusta a 5 si lo prefieres) */
 @media (min-width: 1201px) {
   .meses-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -208,6 +224,21 @@ header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
+}
+
+/* Cabecera de días de la semana en el calendario completo */
+.weekdays-header {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--gris-oscuro);
+}
+
+.weekday-cell {
+  padding: 0.3rem 0;
 }
 
 .day {
@@ -307,32 +338,64 @@ header {
   cursor: pointer;
 }
 
-/* Modal de día (tooltip modal) con tamaño fijo */
+/* Modal de día (tooltip modal) con tamaño fijo y responsive */
 .day-modal {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 400px;
-  height: 300px;
   resize: none;
   overflow: hidden;
-  transform: translate(-50%, -50%);
   background-color: #fff;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   display: none;
   z-index: 1000;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 300px;
 }
 
 .day-modal.active {
   display: block;
 }
 
-/* El contenido del modal de día es draggable */
+@media (max-width: 480px) {
+  .day-modal {
+    width: 90%;
+    height: auto;
+    padding: 1rem;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  .day-modal {
+    width: 80%;
+    height: 300px;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .day-modal {
+    width: 400px;
+    height: 300px;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .day-modal {
+    width: 450px;
+    height: 350px;
+  }
+}
+@media (min-width: 1201px) {
+  .day-modal {
+    width: 500px;
+    height: 400px;
+  }
+}
+
+/* Contenido del modal de día (draggable) */
 .day-modal-content {
   position: relative;
-  padding-top: 2rem; /* Separa la X del contenido */
+  padding-top: 2rem;
   cursor: move;
 }
 
