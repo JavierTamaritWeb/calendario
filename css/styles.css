@@ -21,7 +21,15 @@ html {
 *, *:before, *:after {
   box-sizing: inherit;
 }
-
+h1{
+  font-size: 4rem;
+}
+h2{
+  font-size: 3.6rem;
+}
+h3{
+  font-size: 2rem;
+}
 /***********************
  * TIPOGRAFÍA & BASE
  ***********************/
@@ -40,6 +48,9 @@ header {
 /***********************
  * LEYENDA DE COLORES
  ***********************/
+.heading{
+  font-size: 4rem;
+}
 .legend {
   width: 90%;
   max-width: 1200px;
@@ -68,7 +79,7 @@ header {
 .legend li {
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: var(--gris-oscuro);
 }
 
@@ -191,7 +202,7 @@ header {
   border-radius: 4px;
   background-color: #fdfdfd;
   box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
-  font-size: 0.8rem;
+  font-size: 1.4rem;
   position: relative;
 }
 
@@ -337,7 +348,7 @@ header {
 .close-modal {
   position: absolute;
   top: 1rem;
-  right: 1.2rem;
+  right: 1.6rem;
   font-size: 1.5rem;
   cursor: pointer;
 }
@@ -366,33 +377,33 @@ header {
 
 @media (max-width: 480px) {
   .day-modal {
-    width: 90%;
+    width: 60%;
     height: auto;
     padding: 1rem;
   }
 }
 @media (min-width: 481px) and (max-width: 768px) {
   .day-modal {
-    width: 80%;
-    height: 300px;
+    width: 70%;
+    height: 15rem;
   }
 }
 @media (min-width: 769px) and (max-width: 1024px) {
   .day-modal {
-    width: 400px;
-    height: 300px;
+    width: 30rem;
+    height: 15rem;
   }
 }
 @media (min-width: 1025px) and (max-width: 1200px) {
   .day-modal {
-    width: 450px;
-    height: 350px;
+    width: 35rem;
+    height: 15rem;
   }
 }
 @media (min-width: 1201px) {
   .day-modal {
-    width: 500px;
-    height: 400px;
+    width: 40rem;
+    height: 15rem;
   }
 }
 
