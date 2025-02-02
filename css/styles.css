@@ -250,10 +250,12 @@ header {
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: var(--gris-oscuro);
+  font-size: 1.6rem;
 }
 
 .weekday-cell {
   padding: 0.3rem 0;
+  font-size: 1.6rem;
 }
 
 .day {
@@ -264,6 +266,7 @@ header {
   box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
   position: relative;
   cursor: pointer;
+  font-size: 1.6rem;
 }
 
 .day-label {
@@ -271,6 +274,7 @@ header {
   font-size: 0.7rem;
   margin-top: 4px;
   color: var(--blanco-hueso);
+  font-size: 1.2rem;
 }
 
 .weekend {
@@ -296,14 +300,17 @@ header {
  ***********************/
 .info-adicional {
   margin-top: 1rem;
-  font-size: 0.9rem;
   color: #555;
+}
+.info-adicional p {
+  font-size: 1.5rem;
 }
 
 .info-adicional ul {
   margin-top: 0.5rem;
   padding-left: 1.2rem;
   list-style-type: disc;
+  font-size: 1.4rem;
 }
 
 /***********************
@@ -349,7 +356,7 @@ header {
   position: absolute;
   top: 1rem;
   right: 1.6rem;
-  font-size: 1.5rem;
+  font-size: 3rem;
   cursor: pointer;
 }
 
@@ -412,13 +419,14 @@ header {
   position: relative;
   padding-top: 2rem;
   cursor: move;
+  font-size: 1.2rem;
 }
 
 .close-day-modal {
   position: absolute;
   top: -10px;
   right: -10px;
-  font-size: 1.8rem;
+  font-size: 3rem;
   cursor: pointer;
   color: var(--rojo-coral);
   background-color: #fff;
