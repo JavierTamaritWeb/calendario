@@ -73,6 +73,22 @@ window.addEventListener('DOMContentLoaded', () => {
     generateMiniCalendar(2025, i, miniCalendar.id);
   }
 
+  // Agregar listeners a cada día mini para resaltar el título del mes
+  document.querySelectorAll('.day-mini').forEach(dayEl => {
+    dayEl.addEventListener('mouseover', () => {
+      const card = dayEl.closest('.mes-card');
+      if (card) {
+        card.classList.add('highlight-month');
+      }
+    });
+    dayEl.addEventListener('mouseout', () => {
+      const card = dayEl.closest('.mes-card');
+      if (card) {
+        card.classList.remove('highlight-month');
+      }
+    });
+  });
+
   // Abrir modal correspondiente al hacer clic en la tarjeta
   document.querySelectorAll('.mes-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -87,6 +103,24 @@ window.addEventListener('DOMContentLoaded', () => {
     generateFullCalendar(2025, i, `calendar-full-${i}`);
     generateMonthInfo(2025, i, `info-${i}`);
   }
+
+  // Agregar listeners a cada día del calendario completo para resaltar el título del mes en el modal
+  document.querySelectorAll('.modal .day').forEach(dayEl => {
+    dayEl.addEventListener('mouseover', () => {
+      const modalContent = dayEl.closest('.modal-content');
+      if (modalContent) {
+        const h2 = modalContent.querySelector('h2');
+        if (h2) h2.classList.add('highlight-month');
+      }
+    });
+    dayEl.addEventListener('mouseout', () => {
+      const modalContent = dayEl.closest('.modal-content');
+      if (modalContent) {
+        const h2 = modalContent.querySelector('h2');
+        if (h2) h2.classList.remove('highlight-month');
+      }
+    });
+  });
 
   initModalEvents();
 
@@ -300,11 +334,11 @@ function initModalEvents() {
 }
 
 function showDayModal(year, monthIndex, day, mmdd) {
-  // Al abrir el modal de día, se asigna la fecha y se precarga el formulario.
+  // Asigna la fecha actual al modal de día
   currentDayEvent = { year, monthIndex, day };
   const titleInput = document.getElementById('event-title');
   
-  // Determinar el título por defecto en función del evento del día:
+  // Determinar el título por defecto según el evento:
   let defaultTitle;
   if (specialEvents[mmdd]) {
     defaultTitle = specialEvents[mmdd];
@@ -318,14 +352,14 @@ function showDayModal(year, monthIndex, day, mmdd) {
   currentDayEvent.eventTitle = defaultTitle;
   titleInput.value = defaultTitle;
   
-  // Actualizar el encabezado: "Día [día] ([día de la semana])"
+  // Actualizar el encabezado con el formato: "Día [día] ([día de la semana])"
   const dayInfoDiv = document.getElementById('day-info');
   const dateObj = new Date(year, monthIndex, day);
   const fullDayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
   const dayName = fullDayNames[dateObj.getDay()];
   dayInfoDiv.textContent = `Día ${day} (${dayName})`;
   
-  // Establecer valores por defecto para las horas y limpiar notas
+  // Establecer valores por defecto para las horas y limpiar el campo de notas
   document.getElementById('start-time').value = "00:00";
   document.getElementById('end-time').value = "23:59";
   document.getElementById('notes').value = "";
