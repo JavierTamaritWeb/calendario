@@ -151,6 +151,10 @@ header {
   box-shadow: inset 0 0 1px rgba(0,0,0,0.1);
   font-size: 1.4rem;
   position: relative;
+  transition: font-weight 0.2s ease;
+}
+.day-mini:hover {
+  font-weight: bold;
 }
 .mini-falla { background-color: var(--turquesa); color: var(--blanco-hueso); }
 .mini-evento { background-color: var(--gris-oscuro); color: var(--blanco-hueso); }
@@ -191,6 +195,10 @@ header {
   position: relative;
   cursor: pointer;
   font-size: 1.6rem;
+  transition: font-weight 0.2s ease;
+}
+.day:hover {
+  font-weight: bold;
 }
 .day-label {
   display: block;
@@ -278,11 +286,37 @@ header {
   height: 300px;
 }
 .day-modal.active { display: block; }
-@media (max-width: 480px) { .day-modal { width: 50%; height: auto; padding: 1rem; } }
-@media (min-width: 481px) and (max-width: 768px) { .day-modal { width: 60%; height: 42rem; } }
-@media (min-width: 769px) and (max-width: 1024px) { .day-modal { width: 30rem; height: 42rem; } }
-@media (min-width: 1025px) and (max-width: 1200px) { .day-modal { width: 30rem; height: 42rem; } }
-@media (min-width: 1201px) { .day-modal { width: 30rem; height: 42rem; } }
+@media (max-width: 480px) { 
+  .day-modal { 
+    width: 50%; 
+    height: auto; 
+    padding: 1rem; 
+  } 
+}
+@media (min-width: 481px) and (max-width: 768px) { 
+  .day-modal { 
+    width: 60%; 
+    height: 42rem; 
+  } 
+}
+@media (min-width: 769px) and (max-width: 1024px) { 
+  .day-modal { 
+    width: 30rem; 
+    height: 42rem; 
+  } 
+}
+@media (min-width: 1025px) and (max-width: 1200px) { 
+  .day-modal { 
+    width: 30rem; 
+    height: 42rem; 
+  } 
+}
+@media (min-width: 1201px) { 
+  .day-modal { 
+    width: 30rem; 
+    height: 42rem; 
+  } 
+}
 
 /* Encabezado del modal de día: muestra "Día [día] ([día de la semana])" */
 .day-info {
