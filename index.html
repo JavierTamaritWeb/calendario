@@ -9,7 +9,7 @@
   <link 
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" 
     rel="stylesheet"/>
-  <!-- Enlazar la hoja de estilos -->
+  <!-- Enlazar hojas de estilos (Normalize y estilos propios) -->
   <link rel="stylesheet" href="css/normalize.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -20,7 +20,6 @@
 
   <!-- Leyenda de colores -->
   <div class="legend">
-    <!-- <h2>Leyenda</h2> -->
     <ul>
       <li>
         <span class="legend-color falla"></span>
@@ -43,7 +42,7 @@
   </section>
 
   <!-- 12 Modales para cada mes (0 = Enero, 1 = Febrero, …, 11 = Diciembre) -->
-  <!-- Modal Enero (0) -->
+  <!-- Ejemplo: Modal para Enero (modal-0) -->
   <div class="modal" id="modal-0">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -55,7 +54,7 @@
       </div>
     </div>
   </div>
-  <!-- Modal Febrero (1) -->
+  <!-- Se repite la misma estructura para los demás meses (modal-1 a modal-11) -->
   <div class="modal" id="modal-1">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -67,7 +66,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Marzo (2) -->
   <div class="modal" id="modal-2">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -79,7 +77,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Abril (3) -->
   <div class="modal" id="modal-3">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -91,7 +88,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Mayo (4) -->
   <div class="modal" id="modal-4">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -103,7 +99,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Junio (5) -->
   <div class="modal" id="modal-5">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -115,7 +110,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Julio (6) -->
   <div class="modal" id="modal-6">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -127,7 +121,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Agosto (7) -->
   <div class="modal" id="modal-7">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -139,7 +132,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Septiembre (8) -->
   <div class="modal" id="modal-8">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -151,7 +143,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Octubre (9) -->
   <div class="modal" id="modal-9">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -163,7 +154,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Noviembre (10) -->
   <div class="modal" id="modal-10">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -175,7 +165,6 @@
       </div>
     </div>
   </div>
-  <!-- Modal Diciembre (11) -->
   <div class="modal" id="modal-11">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -188,12 +177,28 @@
     </div>
   </div>
 
-  <!-- Modal para detalles de día (tooltip modal) -->
+  <!-- Modal para detalles de día (tooltip modal) con formulario editable -->
   <div class="day-modal" id="day-modal">
     <div class="day-modal-content">
       <span class="close-day-modal">&times;</span>
-      <p id="day-modal-message"></p>
-      <button id="day-modal-accept">Aceptar</button>
+      <!-- Encabezado que muestra: Día + dia del mes + (día de la semana) -->
+      <div class="day-info" id="day-info"></div>
+      <!-- Formulario para editar título, horas y notas -->
+      <form id="day-modal-form">
+        <label for="event-title">Título:</label>
+        <input type="text" id="event-title" name="event-title" placeholder="Ingrese título" required />
+
+        <label for="start-time">Hora inicial:</label>
+        <input type="time" id="start-time" name="start-time" required />
+
+        <label for="end-time">Hora final:</label>
+        <input type="time" id="end-time" name="end-time" required />
+
+        <label for="notes">Notas:</label>
+        <textarea id="notes" name="notes" placeholder="Introduzca sus notas"></textarea>
+
+        <button type="submit" id="day-modal-accept">Aceptar</button>
+      </form>
     </div>
   </div>
 

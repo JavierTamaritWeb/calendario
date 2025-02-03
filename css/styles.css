@@ -11,46 +11,37 @@
   --naranja-coral: #FF944F;
   --gris-oscuro: #4A4A4A;
 }
-/* GLOBALES*/
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Para facilitar escalas rem */
 html {
   font-size: 62.5%;
-  box-sizing: border-box;
- 
 }
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-h1{
-  font-size: 4rem;
-}
-h2{
-  font-size: 3.6rem;
-}
-h3{
-  font-size: 2rem;
-}
+
 /***********************
  * TIPOGRAFÍA & BASE
  ***********************/
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #f4f4f4;
-  /* Por defecto el texto es rojo coral; se sobrescribe en los días normales */
   color: var(--rojo-coral);
 }
-
 header {
   text-align: center;
   margin: 1.5rem 0;
+}
+.heading {
+  font-size: 4rem;
 }
 
 /***********************
  * LEYENDA DE COLORES
  ***********************/
-.heading{
-  font-size: 4rem;
-}
 .legend {
   width: 90%;
   max-width: 1200px;
@@ -61,28 +52,18 @@ header {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-.legend h2 {
-  font-size: 1.1rem;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: var(--gris-oscuro);
-}
-
 .legend ul {
   list-style: none;
   display: flex;
   justify-content: center;
   gap: 1.5rem;
 }
-
 .legend li {
   display: flex;
   align-items: center;
   font-size: 1.2rem;
   color: var(--gris-oscuro);
 }
-
 .legend-color {
   display: inline-block;
   width: 20px;
@@ -91,18 +72,9 @@ header {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-
-.legend-color.falla {
-  background-color: var(--turquesa);
-}
-
-.legend-color.evento {
-  background-color: var(--gris-oscuro);
-}
-
-.legend-color.festivo {
-  background-color: var(--rojo-coral);
-}
+.legend-color.falla { background-color: var(--turquesa); }
+.legend-color.evento { background-color: var(--gris-oscuro); }
+.legend-color.festivo { background-color: var(--rojo-coral); }
 
 /***********************
  * LEYENDA DE DÍAS DE LA SEMANA
@@ -113,7 +85,6 @@ header {
   margin: 0 auto 1rem;
   padding: 0 0.5rem;
 }
-
 .weekdays-legend ul {
   display: flex;
   justify-content: space-between;
@@ -124,7 +95,6 @@ header {
   padding: 0;
   margin: 0;
 }
-
 .weekdays-legend li {
   flex: 1;
   text-align: center;
@@ -141,33 +111,11 @@ header {
   display: grid;
   gap: 1rem;
 }
-
-/* Breakpoints para la cuadrícula */
-@media (max-width: 480px) {
-  .meses-grid {
-    grid-template-columns: 1fr;
-  }
-}
-@media (min-width: 481px) and (max-width: 768px) {
-  .meses-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (min-width: 769px) and (max-width: 1024px) {
-  .meses-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (min-width: 1025px) and (max-width: 1200px) {
-  .meses-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-@media (min-width: 1201px) {
-  .meses-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
+@media (max-width: 480px) { .meses-grid { grid-template-columns: 1fr; } }
+@media (min-width: 481px) and (max-width: 768px) { .meses-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 769px) and (max-width: 1024px) { .meses-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1025px) and (max-width: 1200px) { .meses-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1201px) { .meses-grid { grid-template-columns: repeat(4, 1fr); } }
 
 /***********************
  * TARJETAS DE MES
@@ -181,10 +129,10 @@ header {
   flex-direction: column;
   cursor: pointer;
 }
-
 .mes-card h3 {
   text-align: center;
   margin-bottom: 0.5rem;
+  font-size: 2rem;
 }
 
 /***********************
@@ -195,7 +143,6 @@ header {
   grid-template-columns: repeat(7, 1fr);
   gap: 0.3rem;
 }
-
 .day-mini {
   text-align: center;
   padding: 0.4rem;
@@ -205,31 +152,11 @@ header {
   font-size: 1.4rem;
   position: relative;
 }
-
-/* Días especiales en mini */
-.mini-falla {
-  background-color: var(--turquesa);
-  color: var(--blanco-hueso);
-}
-.mini-evento {
-  background-color: var(--gris-oscuro);
-  color: var(--blanco-hueso);
-}
-.mini-festivo {
-  background-color: var(--rojo-coral);
-  color: var(--blanco-hueso);
-}
-
-.mini-marker {
-  display: block;
-  font-size: 0.6rem;
-  margin-top: 2px;
-  color: inherit;
-}
-
-.weekend-mini {
-  background-color: #f4e0d8d0;
-}
+.mini-falla { background-color: var(--turquesa); color: var(--blanco-hueso); }
+.mini-evento { background-color: var(--gris-oscuro); color: var(--blanco-hueso); }
+.mini-festivo { background-color: var(--rojo-coral); color: var(--blanco-hueso); }
+.mini-marker { display: block; font-size: 0.6rem; margin-top: 2px; color: inherit; }
+.weekend-mini { background-color: #f4e0d8d0; }
 
 /***********************
  * CALENDARIOS COMPLETOS
@@ -240,8 +167,7 @@ header {
   grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
 }
-
-/* Cabecera de días de la semana en el calendario completo */
+/* Cabecera con los días de la semana en el calendario completo */
 .weekdays-header {
   grid-column: 1 / -1;
   display: grid;
@@ -250,12 +176,10 @@ header {
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: var(--gris-oscuro);
-  font-size: 1.6rem;
 }
-
 .weekday-cell {
   padding: 0.3rem 0;
-  font-size: 1.6rem;
+  font-size: 1.6rem; /* Controla el tamaño de L, M, X, J, V, S, D */
 }
 
 .day {
@@ -268,49 +192,32 @@ header {
   cursor: pointer;
   font-size: 1.6rem;
 }
-
 .day-label {
   display: block;
-  font-size: 0.7rem;
-  margin-top: 4px;
-  color: var(--blanco-hueso);
   font-size: 1.2rem;
+  margin-top: 0.5rem;
+  color: var(--blanco-hueso);
 }
+.weekend { background-color: #faf4f4; }
 
-.weekend {
-  background-color: #faf4f4;
-}
-
-/* Días especiales en calendario completo */
-.falla-day {
-  background-color: var(--turquesa);
-  color: var(--blanco-hueso);
-}
-.day.event {
-  background-color: var(--gris-oscuro);
-  color: var(--blanco-hueso);
-}
-.festivo-valencia {
-  background-color: var(--rojo-coral);
-  color: var(--blanco-hueso);
-}
+.falla-day { background-color: var(--turquesa); color: var(--blanco-hueso); }
+.day.event { background-color: var(--gris-oscuro); color: var(--blanco-hueso); }
+.festivo-valencia { background-color: var(--rojo-coral); color: var(--blanco-hueso); }
 
 /***********************
  * INFO ADICIONAL
  ***********************/
 .info-adicional {
   margin-top: 1rem;
+  font-size: 1.4rem;
   color: #555;
 }
-.info-adicional p {
-  font-size: 1.5rem;
-}
-
+.info-adicional p { font-size: 1.6rem; }
 .info-adicional ul {
+  font-size: 1.4rem;
   margin-top: 0.5rem;
   padding-left: 1.2rem;
   list-style-type: disc;
-  font-size: 1.4rem;
 }
 
 /***********************
@@ -330,28 +237,21 @@ header {
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
-.modal.active {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
-}
-
+.modal.active { display: flex; opacity: 1; pointer-events: auto; }
 .modal-content {
   background-color: #fff;
   position: relative;
-  padding: 1.5rem;
+  padding: 1.6rem;
   width: 90%;
   max-width: 600px;
   border-radius: 8px;
   animation: scaleIn 0.25s ease;
+  font-size: 2rem; /* Afecta el contenido del modal del mes */
 }
-
 @keyframes scaleIn {
   from { transform: scale(0.7); opacity: 0.7; }
   to   { transform: scale(1); opacity: 1; }
 }
-
 .close-modal {
   position: absolute;
   top: 1rem;
@@ -377,41 +277,19 @@ header {
   width: 400px;
   height: 300px;
 }
+.day-modal.active { display: block; }
+@media (max-width: 480px) { .day-modal { width: 60%; height: auto; padding: 1rem; } }
+@media (min-width: 481px) and (max-width: 768px) { .day-modal { width: 70%; height: 15rem; } }
+@media (min-width: 769px) and (max-width: 1024px) { .day-modal { width: 30rem; height: 15rem; } }
+@media (min-width: 1025px) and (max-width: 1200px) { .day-modal { width: 35rem; height: 15rem; } }
+@media (min-width: 1201px) { .day-modal { width: 40rem; height: 30rem; } }
 
-.day-modal.active {
-  display: block;
-}
-
-@media (max-width: 480px) {
-  .day-modal {
-    width: 60%;
-    height: auto;
-    padding: 1rem;
-  }
-}
-@media (min-width: 481px) and (max-width: 768px) {
-  .day-modal {
-    width: 70%;
-    height: 15rem;
-  }
-}
-@media (min-width: 769px) and (max-width: 1024px) {
-  .day-modal {
-    width: 30rem;
-    height: 15rem;
-  }
-}
-@media (min-width: 1025px) and (max-width: 1200px) {
-  .day-modal {
-    width: 35rem;
-    height: 15rem;
-  }
-}
-@media (min-width: 1201px) {
-  .day-modal {
-    width: 40rem;
-    height: 15rem;
-  }
+/* Encabezado del modal de día: muestra "Día [día] ([día de la semana])" */
+.day-info {
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 /* Contenido del modal de día (draggable) */
@@ -419,9 +297,7 @@ header {
   position: relative;
   padding-top: 2rem;
   cursor: move;
-  font-size: 1.2rem;
 }
-
 .close-day-modal {
   position: absolute;
   top: -10px;
@@ -434,11 +310,41 @@ header {
   padding: 0.2rem 0.5rem;
   z-index: 1010;
 }
-
 #day-modal-accept {
   display: block;
   margin: 1rem auto 0;
   padding: 0.5rem 1rem;
+  background-color: var(--rojo-coral);
+  color: var(--blanco-hueso);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Estilos para el formulario del modal de día */
+#day-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#day-modal-form label {
+  font-size: 1.4rem;
+  color: var(--gris-oscuro);
+}
+#day-modal-form input,
+#day-modal-form textarea {
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+#day-modal-form textarea {
+  resize: vertical;
+  min-height: 4rem;
+}
+#day-modal-form button {
+  font-size: 1.6rem;
+  padding: 0.8rem;
   background-color: var(--rojo-coral);
   color: var(--blanco-hueso);
   border: none;

@@ -3,7 +3,7 @@
  * - Calendario basado en semanas (lunes como inicio).
  * - Prioridad de color: Falla > Evento > Festivo > Weekend.
  * - Muestra información y genera archivo .ics.
- * - Modal de día draggable (movible con clic y arrastre).
+ * - Modal de día draggable con formulario editable (título, hora inicial, hora final y notas).
  **************************************************************/
 
 /* ---------- Datos Base ---------- */
@@ -89,12 +89,23 @@ window.addEventListener('DOMContentLoaded', () => {
 
   initModalEvents();
 
-  // Eventos para el modal de día
-  document.getElementById('day-modal-accept').addEventListener('click', () => {
+  // Listener para el formulario del modal de día
+  document.getElementById('day-modal-form').addEventListener('submit', (e) => {
+    e.preventDefault();
     if (currentDayEvent) {
       const { year, monthIndex, day } = currentDayEvent;
-      const eventTitle = `Evento día ${day} de ${monthNames[monthIndex]}`;
-      generateICSFile(eventTitle, year, monthIndex, day);
+      const titleInput = document.getElementById('event-title');
+      const startTime = document.getElementById('start-time').value;
+      const endTime = document.getElementById('end-time').value;
+      const notes = document.getElementById('notes').value.trim();
+      
+      // Guarda el título editado para futuras aperturas
+      currentDayEvent.eventTitle = titleInput.value.trim();
+      
+      const eventTitle = currentDayEvent.eventTitle || `Evento día ${day} de ${monthNames[monthIndex]}`;
+      const description = notes ? `Notas: ${notes}` : "Generado desde el Calendario 2025";
+      
+      generateICSFile(eventTitle, year, monthIndex, day, startTime, endTime, description);
     }
     hideDayModal();
   });
@@ -111,18 +122,18 @@ function generateMiniCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = "";
-  
+
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
-  
+
   // Celdas vacías para alinear el primer día
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day-mini');
     container.appendChild(emptyDiv);
   }
-  
+
   for (let day = 1; day <= totalDays; day++) {
     const mmdd = `${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const date = new Date(year, monthIndex, day);
@@ -130,7 +141,7 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     const dayDiv = document.createElement('div');
     dayDiv.classList.add('day-mini');
     dayDiv.textContent = day;
-  
+
     if (fallaDays.includes(mmdd)) {
       dayDiv.classList.add('mini-falla');
       const markerFa = document.createElement('span');
@@ -149,7 +160,7 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     } else if (isWeekendMondayBased(weekdayMon)) {
       dayDiv.classList.add('weekend-mini');
     }
-  
+
     if (
       !dayDiv.classList.contains('mini-falla') &&
       !dayDiv.classList.contains('mini-evento') &&
@@ -161,13 +172,13 @@ function generateMiniCalendar(year, monthIndex, containerId) {
     container.appendChild(dayDiv);
   }
 }
-  
+
 function generateFullCalendar(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = "";
-  
-  // Crear cabecera de días de la semana
+
+  // Crear cabecera con los días de la semana: L, M, X, J, V, S, D
   const headerRow = document.createElement('div');
   headerRow.classList.add('weekdays-header');
   const daysAbbrev = ['L','M','X','J','V','S','D'];
@@ -178,18 +189,18 @@ function generateFullCalendar(year, monthIndex, containerId) {
     headerRow.appendChild(cell);
   });
   container.appendChild(headerRow);
-  
+
   const firstDay = new Date(year, monthIndex, 1);
   const startDayMon = mondayBasedIndex(firstDay.getDay());
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
-  
+
   // Celdas vacías para alinear el primer día (después de la cabecera)
   for (let i = 0; i < startDayMon; i++) {
     const emptyDiv = document.createElement('div');
     emptyDiv.classList.add('day');
     container.appendChild(emptyDiv);
   }
-  
+
   for (let day = 1; day <= totalDays; day++) {
     const mmdd = `${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const date = new Date(year, monthIndex, day);
@@ -197,7 +208,7 @@ function generateFullCalendar(year, monthIndex, containerId) {
     const dayDiv = document.createElement('div');
     dayDiv.classList.add('day');
     dayDiv.textContent = day;
-  
+
     if (fallaDays.includes(mmdd)) {
       dayDiv.classList.add('falla-day');
       let labelText = "Falla";
@@ -224,7 +235,7 @@ function generateFullCalendar(year, monthIndex, containerId) {
     } else if (isWeekendMondayBased(weekdayMon)) {
       dayDiv.classList.add('weekend');
     }
-  
+
     if (
       !dayDiv.classList.contains('falla-day') &&
       !dayDiv.classList.contains('event') &&
@@ -233,14 +244,14 @@ function generateFullCalendar(year, monthIndex, containerId) {
     ) {
       dayDiv.style.color = "var(--gris-oscuro)";
     }
-  
+
     dayDiv.addEventListener('click', () => {
       showDayModal(year, monthIndex, day, mmdd);
     });
     container.appendChild(dayDiv);
   }
 }
-  
+
 function generateMonthInfo(year, monthIndex, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -288,21 +299,28 @@ function initModalEvents() {
 }
 
 function showDayModal(year, monthIndex, day, mmdd) {
+  // Al abrir el modal de día, se asigna la fecha y se precarga el formulario.
   currentDayEvent = { year, monthIndex, day };
-  const modalMessage = document.getElementById('day-modal-message');
-  let message = `Fecha: ${day} de ${monthNames[monthIndex]}.`;
-  if (fallaDays.includes(mmdd)) {
-    message += " Evento: Falla";
-    if (specialEvents[mmdd]) message += ` – ${specialEvents[mmdd]}`;
-    if (namedHolidays[mmdd]) message += ` (Festivo: ${namedHolidays[mmdd]})`;
-  } else if (specialEvents[mmdd]) {
-    message += ` Evento: ${specialEvents[mmdd]}`;
-    if (namedHolidays[mmdd]) message += ` (Festivo: ${namedHolidays[mmdd]})`;
-  } else if (namedHolidays[mmdd]) {
-    message += ` Festivo: ${namedHolidays[mmdd]}`;
+  const titleInput = document.getElementById('event-title');
+  // Si ya se editó el título previamente para este día, se conserva; de lo contrario se asigna un valor por defecto.
+  if (!currentDayEvent.eventTitle) {
+    currentDayEvent.eventTitle = `Evento día ${day} de ${monthNames[monthIndex]}`;
   }
-  message += " Al hacer clic en Aceptar, se descargará un archivo .ics para agregar el evento a tu calendario.";
-  modalMessage.textContent = message;
+  titleInput.value = currentDayEvent.eventTitle;
+  
+  // Actualizar el encabezado que muestra el día con el formato: "Día [dia] ([día de la semana])"
+  const dayInfoDiv = document.getElementById('day-info');
+  const dateObj = new Date(year, monthIndex, day);
+  const fullDayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+  const dayName = fullDayNames[dateObj.getDay()];
+  dayInfoDiv.textContent = `Día ${day} (${dayName})`;
+  
+  // Establecer valores por defecto para las horas
+  document.getElementById('start-time').value = "00:00";
+  document.getElementById('end-time').value = "23:59";
+  // Limpiar el campo de notas
+  document.getElementById('notes').value = "";
+  
   document.getElementById('day-modal').classList.add('active');
 }
 
@@ -311,11 +329,16 @@ function hideDayModal() {
 }
 
 /* ---------- Funciones para .ics ---------- */
-function generateICSFile(eventTitle, year, monthIndex, day) {
-  const startDate = new Date(year, monthIndex, day, 0, 0);
-  const endDate = new Date(year, monthIndex, day, 23, 59);
+function generateICSFile(eventTitle, year, monthIndex, day, startTime = "00:00", endTime = "23:59", description = "Generado desde el Calendario 2025") {
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+
+  const startDate = new Date(year, monthIndex, day, startHour, startMinute);
+  const endDate = new Date(year, monthIndex, day, endHour, endMinute);
+
   const dtStart = formatDateICS(startDate);
   const dtEnd   = formatDateICS(endDate);
+
   const icsContent = `
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -326,10 +349,11 @@ DTSTAMP:${formatDateICS(new Date())}
 DTSTART:${dtStart}
 DTEND:${dtEnd}
 SUMMARY:${eventTitle}
-DESCRIPTION:Generado desde el Calendario 2025
+DESCRIPTION:${description}
 END:VEVENT
 END:VCALENDAR
   `.trim();
+
   const blob = new Blob([icsContent], { type: 'text/calendar' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
