@@ -3,7 +3,8 @@
  * - Calendario basado en semanas (lunes como inicio).
  * - Prioridad de color: Falla > Evento > Festivo > Weekend.
  * - Muestra información y genera archivo .ics.
- * - Modal de día draggable con formulario editable (título, hora inicial, hora final y notas).
+ * - Modal de día draggable con formulario editable (título, hora inicial, hora final, notas)
+ *   y encabezado que muestra: "Día [día] ([día de la semana])".
  **************************************************************/
 
 /* ---------- Datos Base ---------- */
@@ -302,23 +303,31 @@ function showDayModal(year, monthIndex, day, mmdd) {
   // Al abrir el modal de día, se asigna la fecha y se precarga el formulario.
   currentDayEvent = { year, monthIndex, day };
   const titleInput = document.getElementById('event-title');
-  // Si ya se editó el título previamente para este día, se conserva; de lo contrario se asigna un valor por defecto.
-  if (!currentDayEvent.eventTitle) {
-    currentDayEvent.eventTitle = `Evento día ${day} de ${monthNames[monthIndex]}`;
-  }
-  titleInput.value = currentDayEvent.eventTitle;
   
-  // Actualizar el encabezado que muestra el día con el formato: "Día [dia] ([día de la semana])"
+  // Determinar el título por defecto en función del evento del día:
+  let defaultTitle;
+  if (specialEvents[mmdd]) {
+    defaultTitle = specialEvents[mmdd];
+  } else if (namedHolidays[mmdd]) {
+    defaultTitle = namedHolidays[mmdd];
+  } else if (fallaDays.includes(mmdd)) {
+    defaultTitle = "Falla";
+  } else {
+    defaultTitle = `Evento día ${day} de ${monthNames[monthIndex]}`;
+  }
+  currentDayEvent.eventTitle = defaultTitle;
+  titleInput.value = defaultTitle;
+  
+  // Actualizar el encabezado: "Día [día] ([día de la semana])"
   const dayInfoDiv = document.getElementById('day-info');
   const dateObj = new Date(year, monthIndex, day);
   const fullDayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
   const dayName = fullDayNames[dateObj.getDay()];
   dayInfoDiv.textContent = `Día ${day} (${dayName})`;
   
-  // Establecer valores por defecto para las horas
+  // Establecer valores por defecto para las horas y limpiar notas
   document.getElementById('start-time').value = "00:00";
   document.getElementById('end-time').value = "23:59";
-  // Limpiar el campo de notas
   document.getElementById('notes').value = "";
   
   document.getElementById('day-modal').classList.add('active');

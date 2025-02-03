@@ -278,11 +278,11 @@ header {
   height: 300px;
 }
 .day-modal.active { display: block; }
-@media (max-width: 480px) { .day-modal { width: 60%; height: auto; padding: 1rem; } }
-@media (min-width: 481px) and (max-width: 768px) { .day-modal { width: 70%; height: 15rem; } }
-@media (min-width: 769px) and (max-width: 1024px) { .day-modal { width: 30rem; height: 15rem; } }
-@media (min-width: 1025px) and (max-width: 1200px) { .day-modal { width: 35rem; height: 15rem; } }
-@media (min-width: 1201px) { .day-modal { width: 40rem; height: 30rem; } }
+@media (max-width: 480px) { .day-modal { width: 50%; height: auto; padding: 1rem; } }
+@media (min-width: 481px) and (max-width: 768px) { .day-modal { width: 60%; height: 42rem; } }
+@media (min-width: 769px) and (max-width: 1024px) { .day-modal { width: 30rem; height: 42rem; } }
+@media (min-width: 1025px) and (max-width: 1200px) { .day-modal { width: 30rem; height: 42rem; } }
+@media (min-width: 1201px) { .day-modal { width: 30rem; height: 42rem; } }
 
 /* Encabezado del modal de día: muestra "Día [día] ([día de la semana])" */
 .day-info {
