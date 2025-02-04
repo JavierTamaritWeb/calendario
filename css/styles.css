@@ -135,11 +135,11 @@ header {
   text-align: center;
   margin-bottom: 0.5rem;
   font-size: 2rem;
-  transition: font-weight 0.2s ease;
+  transition: color 0.3s ease;
 }
 /* Agregamos hover para que el nombre del mes aumente su font-weight */
 .mes-card h3:hover {
-  font-weight: bold;
+  color: var(--gris-oscuro);
 }
 
 /***********************
