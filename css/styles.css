@@ -10,6 +10,7 @@
   --rojo-salmon: #FF8C7A;
   --naranja-coral: #FF944F;
   --gris-oscuro: #4A4A4A;
+  --rosa-pastel: #FFD1DC;
 }
 
 * {
@@ -51,7 +52,7 @@ header {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  background-color: #FFD1DC;
+  background-color: var(--rosa-pastel);
 }
 .legend ul {
   list-style: none;
@@ -394,6 +395,12 @@ header {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+#day-modal-form input:focus,
+#day-modal-form textarea:focus {
+  outline: none; /* Remueve el outline por defecto */
+  box-shadow: 1px 0 5px var(  --rojo-coral);
 }
 
 /* Clase para resaltar el mes (para título de mes en la tarjeta o modal) */
